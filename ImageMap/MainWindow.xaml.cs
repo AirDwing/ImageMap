@@ -23,6 +23,17 @@ namespace ImageMap
         public MainWindow()
         {
             InitializeComponent();
+            window.Drop += Grid1_Drop;
+        }
+
+        private void Grid1_Drop(object sender, DragEventArgs e)
+        {
+            string[] x= (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach(var i in x)
+            {
+
+            }
         }
     }
+
 }
