@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ExifLib;
+using System.IO;
 
 namespace ImageMap
 {
@@ -31,7 +33,11 @@ namespace ImageMap
             string[] x= (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach(var i in x)
             {
-
+                JpegInfo info;
+                using (FileStream fs = new FileStream(i, FileMode.Open))
+                {
+                    info = ExifReader.ReadJpeg(fs);
+                }
             }
         }
     }
