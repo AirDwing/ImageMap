@@ -10,6 +10,16 @@
         x:Name="window"
         >
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <WebBrowser Grid.ColumnSpan="2" Grid.Column="0" x:Name="web1"  />
+        
+        <StackPanel Grid.Column="2" >
+            <Image x:Name="image1" Grid.Column="2" Height="200" />
+            
+        </StackPanel>
     </Grid>
 </Window>

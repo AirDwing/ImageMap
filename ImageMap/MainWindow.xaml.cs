@@ -12,18 +12,42 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ExifLib;
+using System.IO;
 
 namespace ImageMap
 {
+    [System.Runtime.InteropServices.ComVisible(true)]
+    public class OprateBasic
+    {
+        public void palymusic(string msg)
+        {
+            MessageBox.Show(msg);
+        }
+    }
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<JpegInfo> info = new List<JpegInfo>();
         public MainWindow()
         {
             InitializeComponent();
+            web1.NavigateToString(Properties.Resources.amap);
+            web1.ObjectForScripting = new OprateBasic();
+            web1.Navigating += Web1_Navigating;
             window.Drop += Grid1_Drop;
+        }
+        /// <summary>
+        /// 禁用web1的文件拖拽功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Web1_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            e.Cancel = true;
+            return;
         }
 
         private void Grid1_Drop(object sender, DragEventArgs e)
@@ -31,8 +55,36 @@ namespace ImageMap
             string[] x= (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach(var i in x)
             {
+                
+                using (FileStream fs = new FileStream(i, FileMode.Open))
+                {
+                    //读取图片的位置信息
+                    var imginfo = ExifReader.ReadJpeg(fs);
+                    info.Add(imginfo);
 
+                    //转换坐标
+                    var GpsLatitude = gps(imginfo.GpsLatitude);
+                    var GpsLongitude = gps(imginfo.GpsLongitude);
+
+                    //调用js
+                    object[] arrojj = new object[2] { GpsLongitude,GpsLatitude };
+                    web1.InvokeScript("addMarker", arrojj);
+
+
+               }
+                var img = new BitmapImage(new Uri(i));
+                image1.Source = img;
             }
+        }
+        /// <summary>
+        /// gps转换
+        /// </summary>
+        /// <param name="g">度分秒</param>
+        /// <returns>6位double</returns>
+        private double gps(double[] g)
+        {
+            
+            return Math.Round(g[0] + (g[1] / 60) + (g[2] / 3600),6);
         }
     }
 
