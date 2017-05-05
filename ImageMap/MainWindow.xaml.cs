@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ExifLib;
 using System.IO;
+using System.Threading;
 
 namespace ImageMap
 {
@@ -22,7 +23,7 @@ namespace ImageMap
     {
         public void palymusic(string msg)
         {
-            MessageBox.Show(msg);
+            
         }
     }
     /// <summary>
@@ -67,13 +68,10 @@ namespace ImageMap
                     var GpsLongitude = gps(imginfo.GpsLongitude);
 
                     //调用js
-                    object[] arrojj = new object[2] { GpsLongitude,GpsLatitude };
+                    object[] arrojj = new object[2] { GpsLongitude, GpsLatitude };
                     web1.InvokeScript("addMarker", arrojj);
 
-
-               }
-                var img = new BitmapImage(new Uri(i));
-                image1.Source = img;
+                }
             }
         }
         /// <summary>
