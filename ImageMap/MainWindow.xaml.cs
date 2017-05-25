@@ -26,6 +26,7 @@ namespace ImageMap
             
         }
     }
+
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
@@ -63,9 +64,12 @@ namespace ImageMap
                     var imginfo = ExifReader.ReadJpeg(fs);
                     info.Add(imginfo);
 
+                    Transform tf = new Transform();
+                    var g = tf.WGS2GCJ(gps(imginfo.GpsLatitude), gps(imginfo.GpsLongitude));
+
                     //转换坐标
-                    var GpsLatitude = gps(imginfo.GpsLatitude);
-                    var GpsLongitude = gps(imginfo.GpsLongitude);
+                    var GpsLatitude = g.Lat;
+                    var GpsLongitude = g.Lng;
 
                     //调用js
                     object[] arrojj = new object[2] { GpsLongitude, GpsLatitude };
@@ -81,7 +85,6 @@ namespace ImageMap
         /// <returns>6位double</returns>
         private double gps(double[] g)
         {
-            
             return Math.Round(g[0] + (g[1] / 60) + (g[2] / 3600),6);
         }
     }

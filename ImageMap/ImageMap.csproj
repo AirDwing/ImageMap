@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EvilTransform.cs" />
     <Compile Include="reading.xaml.cs">
       <DependentUpon>reading.xaml</DependentUpon>
     </Compile>
